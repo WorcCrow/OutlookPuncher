@@ -6,11 +6,8 @@ import re
 import os
 import time
 import datetime
-
-tenant_id = ''
-client_id = ''
-refresh_token = ''
-client_secret = ''
+from tqdm import tqdm
+import time
 
 file_path = "outlook.log"
 data = []
@@ -43,6 +40,11 @@ def printData():
 
 def refreshToken():
   try:
+    tenant_id = ''
+    client_id = ''
+    refresh_token = ''
+    client_secret = ''
+    
     url = "https://login.microsoftonline.com/" + tenant_id + "/oauth2/v2.0/token"
     payload = {
         'client_id': client_id,
@@ -78,11 +80,7 @@ def checkPuchline():
     content = responseJson["value"][0]["body"]["content"]
 
     punchlink = re.findall('href="([^"]+)"', content)
-    #print(content,"\n")
-    #print(punchlink,"\n")
-    #print(punchlink[0],"\n")
     link = punchlink[0].replace("&amp;","&")
-    #print(link,"\n")
     if link in data:
       print("Time Check:",datetime.datetime.now())
     else:
@@ -98,8 +96,9 @@ loadData()
 printData()
 while True:
   checkPuchline()
-  time.sleep(300)
-  #print("\n" * 100)
+  for i in tqdm (range (300), desc="Loading..."):
+    time.sleep(1)
+    pass
 
 
 
