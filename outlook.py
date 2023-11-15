@@ -16,10 +16,16 @@ counter = 0
 def addRecord(link):
   try:
     data.append(link)
-    with open(file_path, 'a') as file:
-        file.write(link + '\n')
+    writeRecord(link)
   except:
     print("Error: addRecord")
+
+def writeRecord(content, mode = 'a'):
+    try:
+      with open(file_path, mode) as file:
+          file.write(content + '\n')
+    except:
+      print("Error: writeRecord")
   
 
 def loadData():
@@ -36,7 +42,7 @@ def printData():
     for line in data:
       print(line)
   except:
-    print("Error: printData")   
+    print("Error: printData")
 
 def refreshToken():
   try:
@@ -94,6 +100,9 @@ def checkPuchline():
 
 loadData()
 printData()
+if(len(data) != 0):
+  writeRecord(data[-1],"w")
+  data = [data[-1]]
 while True:
   checkPuchline()
   for i in tqdm (range (300), desc="Loading..."):
